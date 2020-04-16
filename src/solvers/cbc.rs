@@ -25,7 +25,7 @@ impl CbcSolver {
         CbcSolver {
             name: "Cbc".to_string(),
             command_name: "cbc".to_string(),
-            temp_solution_file: format!("{}.sol", Uuid::new_v4().to_string()),
+            temp_solution_file: format!("/tmp/{}.sol", Uuid::new_v4().to_string()),
             threads: None,
             seconds: None,
         }
@@ -134,7 +134,7 @@ impl SolverTrait for CbcSolver {
     type P = LpProblem;
 
     fn run<'a>(&self, problem: &'a Self::P) -> Result<Solution<'a>, String> {
-        let file_model = format!("{}.lp", problem.unique_name);
+        let file_model = format!("/tmp/{}.lp", problem.unique_name);
         problem.write_lp(&file_model).map_err(|e| e.to_string())?;
 
         let mut params: HashMap<String, String> = Default::default();
